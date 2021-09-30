@@ -1,0 +1,4 @@
+hami:
+  web:
+    cors:
+      enable: true
