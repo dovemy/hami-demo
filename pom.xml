@@ -10,8 +10,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.xuhaoming</groupId>
+            <groupId>io.github.dovemy</groupId>
             <artifactId>hami-web-spring-boot-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.dovemy</groupId>
+            <artifactId>hami-mybatis-plus-spring-boot-starter</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>

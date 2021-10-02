@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xuhaoming.hamidemo.mapper.HamiOrderMapper">
+  <resultMap id="BaseResultMap" type="com.xuhaoming.hamidemo.entity.HamiOrder">
+    <!--@Table hami_order-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_no, user_id, price, create_time, update_time
+  </sql>
+</mapper>
