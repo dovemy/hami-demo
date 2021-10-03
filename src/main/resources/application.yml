@@ -2,6 +2,10 @@ hami:
   web:
     cors:
       enable: true
+  redis:
+    key-prefix: hami
+    cache-ttl-entry:
+      MINUTE_20: 1200
 
 
 spring:
@@ -26,3 +30,9 @@ spring:
       testOnReturn: false
       testWhileIdle: true
       timeBetweenEvictionRunsMillis: 60000
+  redis:
+    host: 127.0.0.1
+    database: 1
+    password: ''
+    port: 6379
+    timeout: 10000ms
