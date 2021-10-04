@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2021/9/30 11:37
  */
 @MapperScan("com.xuhaoming.hamidemo.mapper")
-@SpringBootApplication(scanBasePackages = {"com.xuhaoming.hami.web", "com.xuhaoming.hamidemo"})
+@SpringBootApplication(scanBasePackages = {"io.github.dovemy.hami.web", "com.xuhaoming.hamidemo"})
 public class App {
 
     public static void main(String[] args) {
