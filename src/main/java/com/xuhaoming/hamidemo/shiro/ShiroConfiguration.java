@@ -32,9 +32,13 @@ public class ShiroConfiguration {
      * 默认过滤器参见{@link org.apache.shiro.web.filter.mgt.DefaultFilter}
      */
     @Bean
-    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager, HamiAuthenticationFilter hamiAuthenticationFilter) {
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
+        Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
+        // 自定义filter不能注册为SpringBean，否则会被当做Spring中的filter全局加载，导致下列配置失效
+        filters.put("authc", new HamiAuthenticationFilter());
+
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         // 配置不会被拦截的链接 顺序判断 注意此处无须加上context-path路径
         // authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问
@@ -42,14 +46,14 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
         filterChainDefinitionMap.put("/swagger-resources/**", "anon");
         filterChainDefinitionMap.put("/v2/api-docs", "anon");
+        filterChainDefinitionMap.put("/v2/api-docs-ext", "anon");
         filterChainDefinitionMap.put("/webjars/**", "anon");
         filterChainDefinitionMap.put("/doc.html", "anon");
+        filterChainDefinitionMap.put("/favicon.ico", "anon");
         filterChainDefinitionMap.put("/shiro/login", "anon");
         filterChainDefinitionMap.put("/shiro/logout", "logout");
-        Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
-        filters.put("authc", hamiAuthenticationFilter);
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         filterChainDefinitionMap.put("/**", "authc");
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
 
@@ -69,10 +73,6 @@ public class ShiroConfiguration {
         return securityManager;
     }
 
-    @Bean
-    public HamiAuthenticationFilter hamiAuthenticationFilter() {
-        return new HamiAuthenticationFilter();
-    }
 
 //    @Bean
 //    public SessionManager sessionManager(RedisWebSessionManager redisWebSessionManager) {
