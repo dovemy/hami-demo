@@ -1,6 +1,6 @@
 package com.xuhaoming.hamidemo.controller;
 
-import com.xuhaoming.hami.web.exception.BusinessException;
+import io.github.dovemy.hami.web.exception.BusinessException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
