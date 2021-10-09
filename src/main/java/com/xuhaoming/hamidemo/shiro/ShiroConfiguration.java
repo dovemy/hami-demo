@@ -2,7 +2,6 @@ package com.xuhaoming.hamidemo.shiro;
 
 import com.xuhaoming.hamidemo.shiro.session.RedisSessionDAO;
 import com.xuhaoming.hamidemo.shiro.session.RedisWebSessionManager;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -52,35 +51,27 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/favicon.ico", "anon");
         filterChainDefinitionMap.put("/shiro/login", "anon");
         filterChainDefinitionMap.put("/shiro/logout", "logout");
-        filterChainDefinitionMap.put("/**", "authc");
+        // 调试环境下关闭全局的认证
+        // filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
 
-    @Bean(name = "zeusAuthRealm")
-    public HamiAuthRealm zeusAuthRealm(/*HashedCredentialsMatcher matcher*/) {
+    @Bean(name = "hamiAuthRealm")
+    public HamiAuthRealm hamiAuthRealm() {
         HamiAuthRealm hamiAuthRealm = new HamiAuthRealm();
         hamiAuthRealm.setCacheManager(new MemoryConstrainedCacheManager());
-//        hamiAuthRealm.setCredentialsMatcher(matcher);
         return hamiAuthRealm;
     }
 
     @Bean
-    public SecurityManager securityManager(RedisWebSessionManager redisWebSessionManager) {
+    public SecurityManager securityManager(RedisWebSessionManager redisWebSessionManager, HamiAuthRealm hamiAuthRealm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(zeusAuthRealm());
+        securityManager.setRealm(hamiAuthRealm);
         securityManager.setSessionManager(redisWebSessionManager);
         return securityManager;
     }
 
-
-//    @Bean
-//    public SessionManager sessionManager(RedisWebSessionManager redisWebSessionManager) {
-////        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-////        sessionManager.getSessionIdCookie().setName(SESSION_ID_NAME);
-////        sessionManager.setSessionDAO(redisSessionDAO);
-//        return redisWebSessionManager;
-//    }
 
     @Bean
 //    @ConditionalOnBean(RedisSessionDAO.class)
@@ -94,21 +85,6 @@ public class ShiroConfiguration {
     public RedisSessionDAO redisSessionDAO() {
         return new RedisSessionDAO();
     }
-
-    @Bean
-    public HashedCredentialsMatcher hashedCredentialsMatcher() {
-        return new HashedCredentialsMatcher();
-    }
-
-//    @Bean(name = "hashedCredentialsMatcher")
-//    public ZeusHashedCredentialsMatcher hashedCredentialsMatcher() {
-//        ZeusHashedCredentialsMatcher hashedCredentialsMatcher = new ZeusHashedCredentialsMatcher();
-//        // 采用MD5方式加密
-//        hashedCredentialsMatcher.setHashAlgorithmName("MD5");
-//        // 设置加密次数
-//        hashedCredentialsMatcher.setHashIterations(1);
-//        return hashedCredentialsMatcher;
-//    }
 
 
     @Bean
